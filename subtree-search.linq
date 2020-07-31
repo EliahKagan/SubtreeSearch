@@ -47,10 +47,8 @@ internal static class NodeExtensions {
             if (node == null) return 0;
             
             var leftCode = Search(node.Left);
-            if (leftCode == null) return null;
-            
             var rightCode = Search(node.Right);
-            if (rightCode == null) return null;
+            if (leftCode == null || rightCode == null) return null;
             
             var triple = (node.Key, (int)leftCode, (int)rightCode);
             if (!codes.TryGetValue(triple, out var code)) return null;
@@ -91,6 +89,6 @@ internal static class UnitTest {
         matches.Dump(nameof(matches));
         matches[0].Right!.Left = Tree("donkey");
         
-        tree.Dump($"{nameof(tree)} (after modification)");
+        tree.Dump($"{nameof(tree)} (after modification)", depth: 10);
     }
 }
