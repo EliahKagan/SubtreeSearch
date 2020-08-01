@@ -32,7 +32,7 @@ end
 # (for those not representing nil). This permits trees with duplicate keys.
 def dot(root : Node(T)?, name = "Tree", io = STDOUT, indent = 4) forall T
   margin = " " * indent
-  io.puts "digraph #{name} {"
+  io.puts %(digraph "#{name}" {)
 
   queue = Deque(NamedTuple(node: Node(T), vertex: Int32)).new
   order = 0 # The number of vertices encountered so far.
@@ -41,10 +41,10 @@ def dot(root : Node(T)?, name = "Tree", io = STDOUT, indent = 4) forall T
     vertex = order
     order += 1
     if node
-      io.puts %{#{margin}#{vertex} [label="#{node.key}"]}
+      io.puts %(#{margin}#{vertex} [label="#{node.key}"])
       queue.push({node: node, vertex: vertex})
     else
-      io.puts "#{margin}#{vertex} [shape=point]"
+      io.puts %(#{margin}#{vertex} [shape=point])
     end
     vertex
   end
@@ -64,5 +64,54 @@ def dot(root : Node(T)?, name = "Tree", io = STDOUT, indent = 4) forall T
   io.puts "}"
 end
 
+# Finds all the subtrees in *corpus* that match *pattern*.
+# Runtime is linear in the sum of the sizes of the two trees.
+def search(corpus : Node(T)?, pattern : Node(T)) forall T
+  codes = {} of Tuple(T, Int32, Int32) => Int32 # {key, code, code} => code
+
+  encode = Proc(Node(T)?, Int32).new { raise "Bug: encode not reassigned" }
+  encode = ->(node : Node(T)?) do
+    return 0 unless node
+    triple = {node.key, encode.call(node.left), encode.call(node.right)}
+    codes[triple] ||= codes.size + 1 # +1 because nil => 0 implicitly.
+  end
+
+  pattern_code = encode.call(pattern)
+  matches = [] of Node(T)
+
+  search = Proc(Node(T)?, Int32?).new { raise "Bug: search not reassigned" }
+  search = ->(node : Node(T)?) do
+    return 0 unless node
+
+    left_code = search.call(node.left)
+    right_code = search.call(node.right)
+    return nil unless left_code && right_code
+
+    code = codes[{node.key, left_code, right_code}]?
+    return nil unless code
+    matches << node if code == pattern_code
+    code
+  end
+
+  search.call(corpus)
+  matches
+end
+
+corpus = tree("dog", tree("cat", tree("mule"),
+                                 tree("horse")),
+                     tree("snake", tree("lizard", nil,
+                                                  tree("iguana")),
+                                   tree("fox", tree("cat", tree("mule"),
+                                                           tree("horse")),
+                                               tree("human"))))
+
 pattern = tree("cat", tree("mule"), tree("horse"))
-dot(pattern, "Pattern")
+
+matches = search(corpus, pattern)
+matches.each_with_index do |match, index|
+  dot(match, "Match #{index}")
+  puts
+end
+
+matches[0].right.as(Node(String)).left = tree("donkey")
+dot(corpus, "corpus (after modification)")
