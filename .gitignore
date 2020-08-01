@@ -1,2 +1,5 @@
-# Ignore compiled executables.
+# Compiled executables.
 /subtree-search
+
+# Editor tempfiles.
+.*.swp
