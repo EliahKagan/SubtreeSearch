@@ -63,7 +63,7 @@ internal static class NodeExtensions {
 
 internal static class UnitTest {
     /// <summary>
-    /// Helper function for readably expressing a internal node.
+    /// Helper function for readably expressing an internal node.
     /// </summary>
     private static Node<T> Tree<T>(T key, Node<T>? left, Node<T>? right)
         => new Node<T>(key, left, right);
