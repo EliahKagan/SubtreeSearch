@@ -34,7 +34,7 @@ def dot(root : Node(T)?, name = "Tree", io = STDOUT, indent = 4) forall T
   margin = " " * indent
   io.puts "digraph #{name} {"
 
-  queue = Deque(Tuple(Node(T), Int32)).new # TODO: Maybe used named tuples.
+  queue = Deque(NamedTuple(node: Node(T), vertex: Int32)).new
   order = 0 # The number of vertices encountered so far.
 
   emit_vertex = ->(node : Node(T)?) do
@@ -42,7 +42,7 @@ def dot(root : Node(T)?, name = "Tree", io = STDOUT, indent = 4) forall T
     order += 1
     if node
       io.puts %{#{margin}#{vertex} [label="#{node.key}"]}
-      queue.push({node, vertex})
+      queue.push({node: node, vertex: vertex})
     else
       io.puts "#{margin}#{vertex} [shape=point]"
     end
@@ -56,9 +56,9 @@ def dot(root : Node(T)?, name = "Tree", io = STDOUT, indent = 4) forall T
 
   emit_vertex.call(root)
   until queue.empty?
-    parent_node, parent_vertex = queue.shift
-    emit_edge.call(parent_vertex, emit_vertex.call(parent_node.left))
-    emit_edge.call(parent_vertex, emit_vertex.call(parent_node.right))
+    parent = queue.shift
+    emit_edge.call(parent[:vertex], emit_vertex.call(parent[:node].left))
+    emit_edge.call(parent[:vertex], emit_vertex.call(parent[:node].right))
   end
 
   io.puts "}"
