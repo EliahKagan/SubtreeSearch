@@ -24,7 +24,6 @@ internal static class NodeExtensions {
     internal static List<Node<T>> FindAll<T>(this Node<T>? self, Node<T> other)
     {
         var codes = new Dictionary<(T, int, int), int>(); // (key, code, code) -> code
-        var matches = new List<Node<T>>();
         
         int Encode(Node<T>? node)
         {
@@ -41,6 +40,7 @@ internal static class NodeExtensions {
         }
         
         var patternCode = Encode(other);
+        var matches = new List<Node<T>>();
         
         int? Search(Node<T>? node)
         {
