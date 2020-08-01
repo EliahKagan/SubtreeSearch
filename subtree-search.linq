@@ -21,7 +21,7 @@ internal static class NodeExtensions {
     /// <remarks>
     /// Runtime is linear in the sum of the sizes of the two trees.
     /// </remarks>
-    internal static List<Node<T>> FindAll<T>(this Node<T>? self, Node<T>? other)
+    internal static List<Node<T>> FindAll<T>(this Node<T>? self, Node<T> other)
     {
         var codes = new Dictionary<(T, int, int), int>(); // (key, code, code) -> code
         var matches = new List<Node<T>>();
