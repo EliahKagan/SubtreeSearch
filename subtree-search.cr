@@ -1,3 +1,23 @@
+# Linear time subtree search (in Crystal, with GraphViz DOT generation)
+#
+# Copyright (c) 2020 Eliah Kagan <degeneracypressure@gmail.com>
+#
+# Permission to use, copy, modify, and/or distribute this software for any
+# purpose with or without fee is hereby granted.
+#
+# THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+# REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+# AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+# INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+# LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+# OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+# PERFORMANCE OF THIS SOFTWARE.
+
+# To see the visualization, run "crystal subtree-search.cr", and supply the
+# text written to standard output, which consists of a graph description in DOT
+# code, to GraphViz. One way to do that is to copy it to your clipboard and
+# paste it at https://dreampuf.github.io/GraphvizOnline.
+
 require "deque"
 
 # A mutable node for a binary tree with no parent pointers.
