@@ -76,6 +76,52 @@ internal static class NodeExtensions {
         Search(self);
         return matches;
     }
+    
+    /// <summary>
+    /// Serializes the tree rooted at <c>root</c> as DOT code, interpretable by
+    /// Graphviz.
+    /// </summary>
+    /// <remarks>
+    /// Inspired by "Visualizing binary trees with Graphviz" by Eli Bendersky:
+    /// https://eli.thegreenplace.net/2009/11/23/visualizing-binary-trees-with-graphviz
+    /// That approach uses a node's key to identify a vertex. Here, I identify
+    /// all vertices by ascending integers and separately label each with its
+    /// node's key (for those not representing null). This permits trees with
+    /// duplicate keys.
+    /// </remarks>
+    internal static string
+    ToDot<T>(this Node<T>? self, string name = "Tree", int indent = 4)
+    {
+        var margin = new string(' ', indent);
+        var builder = new StringBuilder();
+        builder.AppendLine($@"digraph ""{name}"" {{");
+        
+        var queue = new Queue<(Node<T> node, int vertex)>();
+        var order = 0; // The number of vertices encountered so far.
+        
+        int EmitVertex(Node<T>? node)
+        {
+            if (node == null) {
+                builder.AppendLine($@"{margin}{order} [shape=point]");
+            } else {
+                builder.AppendLine($@"{margin}{order} [label=""{node.Key}""]");
+                queue.Enqueue((node: node, vertex: order));
+            }
+            return order++;
+        }
+        
+        void EmitEdge(int src, int dest)
+            => builder.AppendLine($"{margin}{src} -> {dest}");
+        
+        for (EmitVertex(self); queue.Count != 0; ) {
+            var parent = queue.Dequeue();
+            EmitEdge(parent.vertex, EmitVertex(parent.node.Left));
+            EmitEdge(parent.vertex, EmitVertex(parent.node.Right));
+        }
+        
+        builder.AppendLine("}");
+        return builder.ToString();
+    }
 }
 
 internal static class UnitTest {
@@ -103,9 +149,15 @@ internal static class UnitTest {
         var pattern = Tree("cat", Tree("mule"), Tree("horse"));
         
         var matches = tree.FindAll(pattern);
-        matches.Dump(nameof(matches));
-        matches[0].Right!.Left = Tree("donkey");
+        matches.Select((Match, index) => new {
+                            Match,
+                            DOT = Match.ToDot($"Match {index}")
+                        })
+                .Dump("Matches");
         
-        tree.Dump($"{nameof(tree)} (after modification)", depth: 10);
+        matches[0].Right!.Left = Tree("donkey");
+        tree.Dump($"Tree after modification", depth: 10);
+        tree.ToDot("Tree after modification")
+            .Dump("Tree after modification (DOT)");
     }
 }
