@@ -13,12 +13,15 @@
   PERFORMANCE OF THIS SOFTWARE.
 -->
 
-# SubtreeSearch
+# SubtreeSearch - linear-time subtree search
 
-These programs demonstrate linear-time subtree search:
+These programs demonstrate
+[linear-time](https://en.wikipedia.org/wiki/Time_complexity#Linear_time) subtree
+search:
 
-- in Crystal (emitting DOT code), *and*
-- in C# (emitting a LINQPad dump graph, including DOT code)
+- in [Crystal](https://crystal-lang.org/) (emitting DOT code), *and*
+- in C# (emitting a [LINQPad](https://www.linqpad.net/) dump, including DOT
+  code).
 
 ## License
 
@@ -28,17 +31,36 @@ See [**`LICENSE`**](LICENSE).
 ## How it works
 
 The algorithm does postorder traversal of the &ldquo;corpus&rdquo; tree to
-search in, memoizing every unique subtree in a hash table. The values of the
-subtree area sequential subtree IDs. Each keys is a subroot element
-(&ldquo;key&rdquo;), the ID representing its left subtree, and the ID
-representing its right subtree. When a child pointer is `nil`/`null`, the ID is
-0. Nonemty subtrees are given strictly positive IDs, starting with 1.
+search in, memoizing every unique subtree in a hash table. The values stored in
+the table are sequential subtree IDs. Each key is an aggregate of the subroot
+element (the node &ldquo;key&rdquo;), the ID representing the left subtree, and
+the ID representing its right subtree. When a child pointer is `nil`/`null`, the
+ID is
+0. Nonempty subtrees are given strictly positive IDs, starting with 1.
 
 Then it does the same thing for the &ldquo;pattern&rdquo; tree to be searched,
 except no new mappings in the hash table are created: if any subtree of the
 pattern tree, including the entire pattern tree, is not already memoized, then
 then the corpus tree does not contain (any copy of) the pattern tree. Otherwise
 it does.
+
+Assuming good hash distribution, this algorithm runs in *O(M + N)* time with
+high probability<sup>**&dagger;**</sup>, when searching a tree of *M* nodes for
+a subtree that is a copy of a tree with *N* nodes.
+
+<sub><sup>**&dagger;**</sup> Because finding or inserting a key in a hash table
+takes amortized *O(1)* time with high probability.</sub>
+
+## Acknowledgements
+
+The way I&rsquo;ve drawn binary trees using GraphViz is inspired by
+[&ldquo;Visualizing binary trees with
+Graphviz&rdquo;](https://eli.thegreenplace.net/2009/11/23/visualizing-binary-trees-with-graphviz)
+by [Eli Bandersky](https://eli.thegreenplace.net/pages/about).
+
+See the comments above the `dot` method in `subtree-search.cr` and the
+`NodeExtensions.ToDot` method in `subtree-search.linq` for information on how
+the approach I&rsquo;ve used is similar and different.
 
 ## History
 
