@@ -1,6 +1,7 @@
 <Query Kind="Program" />
 
-// Linear time subtree search (in C#, for LINQPad)
+// Linear time subtree search
+// (in C#, for LINQPad, with GraphViz DOT generation)
 //
 // Copyright (c) 2020 Eliah Kagan <degeneracypressure@gmail.com>
 //
