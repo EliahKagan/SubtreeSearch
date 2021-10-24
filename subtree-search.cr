@@ -44,7 +44,7 @@ def tree(key : T) forall T
   Node(T).new(key)
 end
 
-# Serializes the tree rooted at *root* as DOT code, intepretable by Graphviz.
+# Serializes the tree rooted at *root* as DOT code, interpretable by Graphviz.
 # Inspired by "Visualizing binary trees with Graphviz" by Eli Bendersky:
 # https://eli.thegreenplace.net/2009/11/23/visualizing-binary-trees-with-graphviz
 # That approach uses a node's key to identify a vertex. Here, I identify all
