@@ -19,9 +19,9 @@ These programs demonstrate
 [linear-time](https://en.wikipedia.org/wiki/Time_complexity#Linear_time) subtree
 search:
 
-- in [Crystal](https://crystal-lang.org/) (emitting DOT code), *and*
-- in C# (emitting a [LINQPad](https://www.linqpad.net/) dump, including DOT
-  code).
+- in [**Crystal**](https://crystal-lang.org/) – emitting DOT code, *and*
+- in **C#** – emitting a [LINQPad](https://www.linqpad.net/) dump, including DOT
+  code.
 
 If you want to render the DOT code as a graph drawing, you can do so by running
 the [Graphviz](https://graphviz.org/) `dot` command, or simply by pasting the
