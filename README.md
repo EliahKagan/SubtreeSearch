@@ -23,6 +23,11 @@ search:
 - in C# (emitting a [LINQPad](https://www.linqpad.net/) dump, including DOT
   code).
 
+If you want to render the DOT code as a graph drawing, you can do so by running
+the [Graphviz](https://graphviz.org/) `dot` command, or simply by pasting the
+DOT code into [GraphvizOnline](https://dreampuf.github.io/GraphvizOnline/) by
+[dreampuf](https://github.com/dreampuf/GraphvizOnline).
+
 ## License
 
 This repository is licensed under [0BSD](https://spdx.org/licenses/0BSD.html).
